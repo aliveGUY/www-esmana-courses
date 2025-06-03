@@ -1,10 +1,12 @@
 {
   "name": "www-esmana-courses",
   "version": "1.0.0",
+  "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --open",
-    "build": "webpack"
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -17,11 +19,9 @@
     "url": "https://github.com/aliveGUY/www-esmana-courses/issues"
   },
   "homepage": "https://github.com/aliveGUY/www-esmana-courses#readme",
-  "description": "",
   "dependencies": {
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "html-webpack-plugin": "5.6.3"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.27.4",
@@ -30,6 +30,7 @@
     "babel-loader": "10.0.0",
     "css-loader": "7.1.2",
     "style-loader": "4.0.0",
+    "html-webpack-plugin": "5.6.3",
     "webpack": "5.99.9",
     "webpack-cli": "6.0.1",
     "webpack-dev-server": "5.2.2"
