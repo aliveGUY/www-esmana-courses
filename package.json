@@ -2,7 +2,6 @@
   "name": "www-esmana-courses",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "webpack serve --mode development --open",
