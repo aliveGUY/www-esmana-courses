@@ -23,7 +23,7 @@ jobs:
       # Build React App
       - name: Build Webpack App
         run: |
-          npm install --omit=dev
+          npm install
           npm run build
           tar -czf react-app.tar.gz -C dist .
 
