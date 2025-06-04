@@ -16,9 +16,10 @@ const PROD_REDIRECT = "https://portal.esmana-main.org/course-checkout";
 const DEVELOP_REDIRECT = "http://localhost:3000/course-checkout";
 
 const injectArrayAsQueryParams = (baseUrl, array) => {
-  const url = new URL(baseUrl);
-  url.searchParams.set("lids", array.join(","));
-  return url.toString();
+  const searchParams = new URLSearchParams();
+  array.forEach((value) => searchParams.append("lids", value.toString()));
+
+  return `${baseUrl}?${searchParams}`;
 };
 
 const LectureItem = ({ lecture, isAllLectures }) => {
