@@ -1,8 +1,25 @@
 import React, { useState } from "react";
 import SectionWrapper from "../common/SectionWrapper";
-import { Box, Button, Divider, Stack, Switch, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Link,
+  Stack,
+  Switch,
+  Typography,
+} from "@mui/material";
 import { map } from "lodash";
 import { useFormattedDates } from "../../hooks/useFormattedDates";
+
+const PROD_REDIRECT = "https://portal.esmana-main.org/course-checkout";
+const DEVELOP_REDIRECT = "http://localhost:3000/course-checkout";
+
+const injectArrayAsQueryParams = (baseUrl, array) => {
+  const url = new URL(baseUrl);
+  url.searchParams.set("lids", array.join(","));
+  return url.toString();
+};
 
 const LectureItem = ({ lecture, isAllLectures }) => {
   const { description, title, startTime, endTime, price } = lecture;
@@ -13,7 +30,12 @@ const LectureItem = ({ lecture, isAllLectures }) => {
   });
 
   return (
-    <Stack direction="row" spacing={2} alignItems="center" sx={{ px: 1 }}>
+    <Stack
+      direction="row"
+      spacing={2}
+      alinjectArrayAsQueryParamsignItems="center"
+      sx={{ px: 1 }}
+    >
       {!isAllLectures && <Checkbox checked={true} />}
       <Stack
         direction={{ md: "row" }}
@@ -55,6 +77,11 @@ const LectureItem = ({ lecture, isAllLectures }) => {
 };
 
 const SummaryCard = ({ isAllLectures, onToggle }) => {
+  const baseUrl =
+    process.env.NODE_ENV === "development" ? DEVELOP_REDIRECT : PROD_REDIRECT;
+
+  const redirect = injectArrayAsQueryParams(baseUrl, [1, 2, 3, 4]);
+
   return (
     <Box
       sx={{
@@ -100,7 +127,14 @@ const SummaryCard = ({ isAllLectures, onToggle }) => {
             </Typography>
           </Stack>
         </Stack>
-        <Button variant="contained" color="secondary" fullWidth>
+        <Button
+          variant="contained"
+          color="secondary"
+          fullWidth
+          component={Link}
+          href={redirect}
+          target="_blank"
+        >
           Purchase
         </Button>
       </Box>
