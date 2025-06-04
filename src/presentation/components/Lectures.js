@@ -12,9 +12,6 @@ import {
 import { map } from "lodash";
 import { useFormattedDates } from "../../hooks/useFormattedDates";
 
-const PROD_REDIRECT = "https://portal.esmana-main.org/course-checkout";
-const DEVELOP_REDIRECT = "http://localhost:3000/course-checkout";
-
 const injectArrayAsQueryParams = (baseUrl, array) => {
   const searchParams = new URLSearchParams();
   array.forEach((value) => searchParams.append("lids", value.toString()));
@@ -78,10 +75,10 @@ const LectureItem = ({ lecture, isAllLectures }) => {
 };
 
 const SummaryCard = ({ isAllLectures, onToggle }) => {
-  const baseUrl =
-    process.env.NODE_ENV === "development" ? DEVELOP_REDIRECT : PROD_REDIRECT;
-
-  const redirect = injectArrayAsQueryParams(baseUrl, [1, 2, 3, 4]);
+  const redirect = injectArrayAsQueryParams(
+    `${PORTAL_ORIGIN}/course-checkout`,
+    [1, 2, 3, 4]
+  );
 
   return (
     <Box
@@ -136,7 +133,7 @@ const SummaryCard = ({ isAllLectures, onToggle }) => {
           href={redirect}
           target="_blank"
         >
-          Purchase
+          Sign Up
         </Button>
       </Box>
     </Box>
