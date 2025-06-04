@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { map } from "lodash";
 import { useFormattedDates } from "../../hooks/useFormattedDates";
+import { PORTAL_ORIGIN } from "../../contants";
 
 const injectArrayAsQueryParams = (baseUrl, array) => {
   const searchParams = new URLSearchParams();
