@@ -3,6 +3,7 @@ import SectionWrapper from "../common/SectionWrapper";
 import {
   Box,
   Button,
+  Checkbox,
   Divider,
   Link,
   Stack,
@@ -20,13 +21,31 @@ const injectArrayAsQueryParams = (baseUrl, array) => {
   return `${baseUrl}?${searchParams}`;
 };
 
-const LectureItem = ({ lecture, isAllLectures }) => {
-  const { description, title, startTime, endTime, price } = lecture;
+const LectureItem = ({
+  lecture,
+  isAllLectures,
+  selectedLectures,
+  onRemove,
+  onAdd,
+}) => {
+  const { description, title, startTime, endTime, price, id } = lecture;
 
   const { date, hoursStart, hoursEnd } = useFormattedDates({
     startTime,
     endTime,
   });
+
+  const isSelected = () => {
+    return selectedLectures.some((obj) => obj.id === id);
+  };
+
+  const toggleSelection = () => {
+    if (isSelected()) {
+      onRemove(lecture);
+      return;
+    }
+    onAdd(lecture);
+  };
 
   return (
     <Stack
@@ -35,7 +54,9 @@ const LectureItem = ({ lecture, isAllLectures }) => {
       alinjectArrayAsQueryParamsignItems="center"
       sx={{ px: 1 }}
     >
-      {!isAllLectures && <Checkbox checked={true} />}
+      {!isAllLectures && (
+        <Checkbox checked={isSelected()} onClick={toggleSelection} />
+      )}
       <Stack
         direction={{ md: "row" }}
         width="100%"
@@ -75,10 +96,17 @@ const LectureItem = ({ lecture, isAllLectures }) => {
   );
 };
 
-const SummaryCard = ({ isAllLectures, onToggle }) => {
+const SummaryCard = ({ isAllLectures, onToggle, selectedLectures }) => {
+  const totalPrice = selectedLectures.reduce(
+    (sum, lecture) => sum + Number(lecture.price),
+    0
+  );
+
+  const selectedIds = selectedLectures.map((lecture) => lecture.id);
+
   const redirect = injectArrayAsQueryParams(
     `${PORTAL_ORIGIN}/course-checkout`,
-    [1, 2, 3, 4]
+    selectedIds
   );
 
   return (
@@ -98,7 +126,7 @@ const SummaryCard = ({ isAllLectures, onToggle }) => {
           justifyContent="space-between"
         >
           <Typography variant="title" fontWeight={700}>
-            6k UAH
+            {totalPrice} UAH
           </Typography>
           <Divider />
           <Stack>
@@ -133,6 +161,7 @@ const SummaryCard = ({ isAllLectures, onToggle }) => {
           component={Link}
           href={redirect}
           target="_blank"
+          disabled={totalPrice === 0}
         >
           Sign Up
         </Button>
@@ -141,11 +170,23 @@ const SummaryCard = ({ isAllLectures, onToggle }) => {
   );
 };
 
-const Lectures = ({ lectures }) => {
+const Lectures = ({
+  lectures,
+  selectedLectures,
+  onRemove,
+  onAdd,
+  onSelectionReset,
+}) => {
   const [isAllLectures, setIsAllLectures] = useState(true);
 
   const handleSelectionToggle = () => {
-    setIsAllLectures((prev) => !prev);
+    if (isAllLectures) {
+      setIsAllLectures(false);
+      return
+    }
+
+    setIsAllLectures(true);
+    onSelectionReset();
   };
 
   return (
@@ -166,12 +207,16 @@ const Lectures = ({ lectures }) => {
               lecture={lecture}
               key={index}
               isAllLectures={isAllLectures}
+              selectedLectures={selectedLectures}
+              onRemove={onRemove}
+              onAdd={onAdd}
             />
           ))}
         </Stack>
         <SummaryCard
           onToggle={handleSelectionToggle}
           isAllLectures={isAllLectures}
+          selectedLectures={selectedLectures}
         />
       </Stack>
     </SectionWrapper>
