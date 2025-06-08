@@ -50,8 +50,7 @@ jobs:
             echo "Cleaning old React build artifacts..."
             find . \
               -type f \
-              \( -name "*.js" -o -name "*.js.map" -o -name "*.gz" -o -name "*.chunk.js" \) \
-              -not -name "index.html" \
+              \( -name "*.js" -o -name "*.js.map" -o -name "*.gz" -o -name "*.chunk.js" -o -name "*.txt" \) \
               -not -name ".htaccess" \
               -delete
 
